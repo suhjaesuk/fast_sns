@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +31,12 @@ public class MemberController {
 
     @GetMapping("/members/{id}")
     public MemberDto getMember(@PathVariable Long id) {
+        return memberReadService.getMember(id);
+    }
+
+    @PutMapping("/{id}/name")
+    public MemberDto changeNickname(@PathVariable Long id, @RequestBody String nickname) {
+        memberWriteService.changeNickname(id, nickname);
         return memberReadService.getMember(id);
     }
 }

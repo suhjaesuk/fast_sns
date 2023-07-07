@@ -20,4 +20,12 @@ public class MemberWriteService {
 
         return memberRepository.save(member);
     }
+
+    public void changeNickname(Long memberId, String nickname) {
+
+        var member = memberRepository.findById(memberId).orElseThrow();
+        member.changeNickname(nickname);
+        memberRepository.save(member);
+        // TODO: 변경 내역 히스토리
+    }
 }
