@@ -15,10 +15,6 @@ public class MemberRepository {
     final private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public Member save(Member member) {
-        /*
-            TODO - member id를 넣고 갱신 또는 삽입을 정함
-                 - 반환 값은 id를 담아서 반환한다.
-         */
         if (member.getId() == null) {
             return insert(member);
         }
