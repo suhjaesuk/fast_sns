@@ -1,5 +1,6 @@
 package com.example.fast_sns.controller;
 
+import com.example.fast_sns.domain.member.dto.MemberDto;
 import com.example.fast_sns.domain.member.dto.RegisterMemberCommand;
 import com.example.fast_sns.domain.member.entity.Member;
 import com.example.fast_sns.domain.member.repository.MemberRepository;
@@ -22,12 +23,13 @@ public class MemberController {
     private final MemberReadService memberReadService;
 
     @PostMapping("/members")
-    public Member register(@RequestBody RegisterMemberCommand command) {
-        return memberWriteService.create(command);
+    public MemberDto register(@RequestBody RegisterMemberCommand command) {
+        var member = memberWriteService.register(command);
+        return memberReadService.toDto(member);
     }
 
     @GetMapping("/members/{id}")
-    public Member getMember(@PathVariable Long id) {
+    public MemberDto getMember(@PathVariable Long id) {
         return memberReadService.getMember(id);
     }
 }
