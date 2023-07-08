@@ -1,6 +1,7 @@
 package com.example.fast_sns.controller;
 
 import com.example.fast_sns.domain.member.dto.MemberDto;
+import com.example.fast_sns.domain.member.dto.MemberNicknameHistoryDto;
 import com.example.fast_sns.domain.member.dto.RegisterMemberCommand;
 import com.example.fast_sns.domain.member.entity.Member;
 import com.example.fast_sns.domain.member.repository.MemberRepository;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -38,5 +41,10 @@ public class MemberController {
     public MemberDto changeNickname(@PathVariable Long id, @RequestBody String nickname) {
         memberWriteService.changeNickname(id, nickname);
         return memberReadService.getMember(id);
+    }
+
+    @GetMapping("/{memberId}/nickname-histories")
+    public List<MemberNicknameHistoryDto> getNicknameHistories(@PathVariable Long memberId) {
+        return memberReadService.getNicknameHistories(memberId);
     }
 }

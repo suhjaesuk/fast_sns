@@ -39,6 +39,7 @@ public class MemberRepository {
         var member = namedParameterJdbcTemplate.queryForObject(sql, param, rowMapper);
         return Optional.ofNullable(member);
     }
+
     public Member save(Member member) {
         if (member.getId() == null) {
             return insert(member);
