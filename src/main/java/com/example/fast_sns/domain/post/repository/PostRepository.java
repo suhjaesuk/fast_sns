@@ -74,6 +74,7 @@ public class PostRepository {
         return new PageImpl<>(posts, pageRequest, getCount(memberId));
     }
 
+
     private Integer getCount(Long memberId) {
         String countQuery = String.format("""
                 SELECT count(id)
@@ -101,6 +102,27 @@ public class PostRepository {
         return namedParameterJdbcTemplate.query(query, params, ROW_MAPPER);
     }
 
+    public List<Post> findAllByLessThanIdAndInMemberIdsAndOrderByIdDesc(Long id, List<Long> memberIds, int size) {
+        if (memberIds.isEmpty()) {
+            return List.of();
+        }
+
+        var params = new MapSqlParameterSource()
+                .addValue("id", id)
+                .addValue("memberId", memberIds)
+                .addValue("size", size);
+
+        String query = String.format("""
+                SELECT *
+                FROM %s
+                WHERE memberIds in (:memberIds) and id < :id
+                ORDER BY id DESC
+                LIMIT :size
+                """, TABLE);
+
+        return namedParameterJdbcTemplate.query(query, params, ROW_MAPPER);
+    }
+
     public List<Post> findAllByMemberIdAndOrderByIdDesc(Long memberId, int size) {
         var params = new MapSqlParameterSource()
                 .addValue("memberId", memberId)
@@ -110,6 +132,26 @@ public class PostRepository {
                 SELECT *
                 FROM %s
                 WHERE memberId = :memberId
+                ORDER BY id DESC
+                LIMIT :size
+                """, TABLE);
+
+        return namedParameterJdbcTemplate.query(query, params, ROW_MAPPER);
+    }
+
+    public List<Post> findAllByInMemberIdsAndOrderByIdDesc(List<Long> memberIds, int size) {
+        if (memberIds.isEmpty()) {
+            return List.of();
+        }
+
+        var params = new MapSqlParameterSource()
+                .addValue("memberId", memberIds)
+                .addValue("size", size);
+
+        String query = String.format("""
+                SELECT *
+                FROM %s
+                WHERE memberIds in (:memberIds)
                 ORDER BY id DESC
                 LIMIT :size
                 """, TABLE);
